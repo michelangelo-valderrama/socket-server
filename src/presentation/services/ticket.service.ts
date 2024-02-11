@@ -5,7 +5,7 @@ import { WssService } from "./wss.service"
 export class TicketService {
   constructor(private readonly wssService = WssService.instance) {}
 
-  public readonly tickets: Ticket[] = []
+  public tickets: Ticket[] = []
 
   private readonly workingOnTickets: Ticket[] = []
 
@@ -14,7 +14,7 @@ export class TicketService {
   }
 
   public get lastWorkingOnTickets(): Ticket[] {
-    return this.workingOnTickets.splice(0, 4)
+    return this.workingOnTickets.slice(0, 4)
   }
 
   public get lastTicketNumber(): number {
@@ -46,6 +46,7 @@ export class TicketService {
     this.workingOnTickets.unshift({ ...ticket })
 
     this.onTicketNumberChange()
+    this.onWorkingOnChanged()
 
     return { status: "ok", ticket }
   }
@@ -54,7 +55,7 @@ export class TicketService {
     const ticket = this.tickets.find((t) => t.id === id)
     if (!ticket) return { status: "error", message: "Ticket no encontrado" }
 
-    this.tickets.map((t) => {
+    this.tickets = this.tickets.map((t) => {
       if (t.id === id) t.done = true
       return t
     })
@@ -66,6 +67,13 @@ export class TicketService {
     this.wssService.sendMessage(
       "on-ticket-count-changed",
       this.pendingTickets.length
+    )
+  }
+
+  private onWorkingOnChanged() {
+    this.wssService.sendMessage(
+      "on-working-on-changed",
+      this.lastWorkingOnTickets
     )
   }
 }
