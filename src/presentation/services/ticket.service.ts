@@ -45,6 +45,8 @@ export class TicketService {
 
     this.workingOnTickets.unshift({ ...ticket })
 
+    this.onTicketNumberChange()
+
     return { status: "ok", ticket }
   }
 
