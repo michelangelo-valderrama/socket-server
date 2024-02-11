@@ -1,10 +1,12 @@
 import { Router } from "express"
 import { TicketController } from "./controller"
+import { TicketService } from "../services"
 
 export class TicketRoutes {
   static get router() {
     const router = Router()
-    const controller = new TicketController()
+
+    const controller = new TicketController(new TicketService())
 
     router.get("/", controller.getTickets)
     router.get("/last", controller.getLastTicketNumber)
