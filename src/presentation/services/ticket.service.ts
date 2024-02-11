@@ -5,16 +5,7 @@ import { WssService } from "./wss.service"
 export class TicketService {
   constructor(private readonly wssService = WssService.instance) {}
 
-  public readonly tickets: Ticket[] = [
-    { id: UuidAdapter.v4(), number: 1, createdAt: new Date(), done: false },
-    { id: UuidAdapter.v4(), number: 2, createdAt: new Date(), done: false },
-    { id: UuidAdapter.v4(), number: 3, createdAt: new Date(), done: false },
-    { id: UuidAdapter.v4(), number: 4, createdAt: new Date(), done: true },
-    { id: UuidAdapter.v4(), number: 5, createdAt: new Date(), done: true },
-    { id: UuidAdapter.v4(), number: 6, createdAt: new Date(), done: true },
-    { id: UuidAdapter.v4(), number: 7, createdAt: new Date(), done: false },
-    { id: UuidAdapter.v4(), number: 8, createdAt: new Date(), done: false },
-  ]
+  public readonly tickets: Ticket[] = []
 
   private readonly workingOnTickets: Ticket[] = []
 
