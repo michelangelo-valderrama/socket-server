@@ -1,7 +1,10 @@
 import { type Ticket } from "../../domain"
 import { UuidAdapter } from "../../config"
+import { WssService } from "./wss.service"
 
 export class TicketService {
+  constructor(private readonly wssService = WssService.instance) {}
+
   public readonly tickets: Ticket[] = [
     { id: UuidAdapter.v4(), number: 1, createdAt: new Date(), done: false },
     { id: UuidAdapter.v4(), number: 2, createdAt: new Date(), done: false },
@@ -36,6 +39,8 @@ export class TicketService {
     }
 
     this.tickets.push(ticket)
+    this.onTicketNumberChange()
+
     return ticket
   }
 
@@ -62,5 +67,12 @@ export class TicketService {
     })
 
     return { status: "ok" }
+  }
+
+  private onTicketNumberChange() {
+    this.wssService.sendMessage(
+      "on-ticket-count-changed",
+      this.pendingTickets.length
+    )
   }
 }
